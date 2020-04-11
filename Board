@@ -1,122 +1,52 @@
-public class Board
+import java.util.Scanner;
+
+public class Player
 {
-    //a two dimentional array of Blocks
-    protected Block[][] block;
-    //a two dimentional array of integers
-    protected int[][] board;
+    private int value;
+    private String name;
 
-    /**
-     * constructor
-     */
-    public Board()
+    public Player(int value, String name)
     {
-        block = new Block[2][2];
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 2; j++)
-            {
-                block[i][j] = new Block();
-            }
-        }
-        board = new int[6][6];
-        //initialization of the board
-        for (int i = 0; i < 6; i++)
-        {
-            for (int j = 0; j < 6; j++)
-            {
-                board[i][j] = 0;
-            }
-        }
+        this.value = value;
+        this.name = name;
     }
 
-    /**
-     * getter method of each block
-     * @param i index of the block
-     * @return returns the selected block
-     */
-    public Block getBlock(int i)
+    public int getValue()
     {
-        return block[i/2][i%2];
+        return value;
     }
 
-    /**
-     * updates the board according to the positions in each block
-     */
-    public void updateBoard()
+    public String getName()
     {
-        for (int iBlock=0; iBlock<6; iBlock++)
-        {
-            for (int jBlock=0; jBlock<6; jBlock++)
-            {
-                for (int i=0; i<3; i++)
-                {
-                    for (int j=0; j<3; j++)
-                    {
-                        board[iBlock*3 + i][jBlock*3 + j] = block[i][j].getPosition(i,j);
-                    }
-                }
-            }
-        }
+        return name;
     }
 
-    /**
-     * prints the game according to each state of array board
-     */
-    public void printBoard()
+    public void Play(Board board)
     {
-        for (int i = 0; i < 6; i++)
+        Scanner input = new Scanner(System.in);
+        System.out.println("It's "+getName()+"'s turn.");
+        System.out.println("Insert the block you want to put your pawn in:");
+        int block = input.nextInt();
+        System.out.println("Insert the position you want to put your pawn in:");
+        int positionI = input.nextInt();
+        int positionJ = input.nextInt();
+        board.getBlock(block-1).setPosition(positionI-1,positionJ-1,value);
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        board.updateBoard();
+        board.printBoard();
+
+        System.out.println("Which block do you intend to rotate?");
+        block = input.nextInt();
+        if (!(board.getBlock(block-1).isEmpty()))
         {
-            for (int j = 0; j < 6; j++)
-            {
-                switch (board[i][j])
-                {
-                    case 0:
-                        System.out.print(" __ ");
-                        break;
-                    case 1: //red
-                        System.out.print("\uD83D\uDD34 ");
-                        break;
-                    case 2: //blue
-                        System.out.print("\uD83D\uDD35 ");
-                        break;
-                }
-
-                if (i == 5)
-                    System.out.print("\n");
-
-                if (i == 2)
-                    System.out.print("|");
-                else if (i == 5 && j == 2)
-                    System.out.println("--------------------");
-            }
+            System.out.println("In which direction do you want to rotate this block? (CW/CCW)");
+            String direction = input.next();
+            board.getBlock(block-1).rotate(direction);
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+            board.updateBoard();
+            board.printBoard();
         }
-    }
-
-    /**
-     * checks for each player to see if there is 5 pawns in a row
-     * @param player value of the player
-     * @return returns the value of player if they win, or 0 if they don't
-     */
-    public int checkWin(int player)
-    {
-        for (int i=0; i<2; i++)
-        {
-            for (int j=0; j<2; j++)
-            {
-                if (board[i][j] == player
-                        && board[i][j] == board[i+1][j]
-                        && board[i+1][j] == board[i+2][j]
-                        && board[i+2][j] == board[i+3][j]
-                        && board[i+3][j] == board[i+4][j])
-                    return board[i][j];
-                else if (board[i][j] == player
-                        && board[i][j] == board[i][j+1]
-                        && board[i][j+1] == board[i][j+2]
-                        && board[i][j+2] == board[i][j+3]
-                        && board[i][j+3] == board[i][j+4])
-                    return board[i][j];
-            }
-        }
-        return 0;
     }
 }
