@@ -24,7 +24,7 @@ public class Board
         {
             for (int j = 0; j < 6; j++)
             {
-                board[i][j] = 0;
+                board[i][j] = 0; 
             }
         }
     }
