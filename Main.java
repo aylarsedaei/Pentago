@@ -13,6 +13,7 @@ public class Main
         //the infinite loop of the game, it ends in case of winning or draw
         while (true)
         {
+            pentago.printBoard();
             //Red's Turn
             red.Play(pentago);
             if (pentago.checkWin(red.getValue()) == red.getValue()
