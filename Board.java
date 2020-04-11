@@ -1,8 +1,13 @@
 public class Board
 {
+    //a two dimentional array of Blocks
     protected Block[][] block;
+    //a two dimentional array of integers
     protected int[][] board;
 
+    /**
+     * constructor
+     */
     public Board()
     {
         block = new Block[2][2];
@@ -24,13 +29,19 @@ public class Board
         }
     }
 
+    /**
+     * getter method of each block
+     * @param i index of the block
+     * @return returns the selected block
+     */
     public Block getBlock(int i, int j)
     {
         return block[i][j];
     }
 
-    //🔴 🔵
-
+    /**
+     * updates the board according to the positions in each block
+     */
     public void updateBoard()
     {
         for (int iBlock=0; iBlock<2; iBlock++)
@@ -41,13 +52,16 @@ public class Board
                 {
                     for (int j=0; j<3; j++)
                     {
-                        board[iBlock*3 + i][jBlock*2 + j] = block[iBlock][jBlock].getPosition(iBlock,jBlock);
+                        board[iBlock*3 + i][jBlock*3 + j] = block[iBlock][jBlock].getPosition(iBlock,jBlock);
                     }
                 }
             }
         }
     }
 
+    /**
+     * prints the game according to each state of array board
+     */
     public void printBoard()
     {
         for (int i = 0; i < 6; i++)
@@ -79,7 +93,11 @@ public class Board
         }
     }
 
-
+    /**
+     * checks for each player to see if there is 5 pawns in a row
+     * @param player value of the player
+     * @return returns the value of player if they win, or 0 if they don't
+     */
     public int checkWin(int player)
     {
         for (int i=0; i<2; i++)
